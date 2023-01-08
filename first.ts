@@ -1,19 +1,13 @@
-interface Cat {meow:number}
-interface Dog {bow:number}
+const isRejected = (input: PromiseSettledResult<unknown>): input is PromiseRejectedResult => {
+    return input.status === 'rejected'
+};
+const isFulfilled = <T>(input: PromiseSettledResult<T>): input is PromiseFulfilledResult<T> => {
+    return input.status === 'fulfilled'
+};
 
-function catOrDog(a: Cat | Dog): a is Dog{
-    //타입 판별 직접 만듬
-    if((a as Cat).meow){return false}
-    return true;
-}
+//PromiseSettledResult PromiseRejectedResult PromiseFulfilledResult
 
-//타입을 구분해주는 커스텀 함수를 직접 만들 수 있어요.
-function pet(a: Cat | Dog){
-    if(catOrDog(a)){
-        console.log(a.bow);
-    }
+const promises = await Promise.allSettled([Promise.resolve('a'), Promise.resolve('b')]);
+const errors = promises.filter(isRejected);
 
-    if('meow' in a){
-        console.log(a.meow);
-    }
-}
+export {};
